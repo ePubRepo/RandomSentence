@@ -20,7 +20,7 @@ class SegmentMapper {
  public:
     SegmentMapper();
     explicit SegmentMapper(const string &filePath);
-    string populateNonTerminal(string terminalName);
+    string populateNonTerminal(const string &terminalName);
     string getRawFile();
     string getFirstSegmentName(const string &line);
     int getSegmentLength(const string &line);

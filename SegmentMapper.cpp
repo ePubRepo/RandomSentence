@@ -10,6 +10,7 @@
 #include <fstream>
 #include "SegmentMapper.h"
 #include "catch.hpp"
+#include "random.h"
 
 SegmentMapper::SegmentMapper () {
 }
@@ -48,7 +49,13 @@ int SegmentMapper::getNumLinesInFile() {
 
 void SegmentMapper::storePossibleSegmentValue(const string &key,
                                         const string &possibleSegmentValue) {
-    cout << "Key: " << key << ", Value: " << possibleSegmentValue;
+    //  Step 1: Determine if Key Exists
+    if (this->segmentMapping.find(key) == this->segmentMapping.end()) {
+        this->segmentMapping[key] = vector<string>();
+    }
+
+    //  Step 2: Append Value
+    this->segmentMapping[key].push_back(possibleSegmentValue);
 }
 
 void SegmentMapper::parseFile() {
@@ -112,6 +119,16 @@ vector<string> SegmentMapper::getFileLines() {
     return this->fileLines;
 }
 
+string SegmentMapper::populateNonTerminal(const string &terminalName) {
+    if (this->segmentMapping.find(terminalName) == this->segmentMapping.end()) {
+        return "ERROR";
+    }
+
+    vector<string> possibleValues = this->segmentMapping[terminalName];
+    int index = randomInteger(0, possibleValues.size() - 1);
+    return possibleValues[index];
+}
+
 TEST_CASE("RandomSentence/SegmentMapper::getRawFile()", "") {
     string tFileName = "grammars/test.g";
     SegmentMapper tMapper(tFileName);
@@ -147,9 +164,16 @@ TEST_CASE("RandomSentence/SegmentMapper::getSegmentLength()", "") {
     REQUIRE(tMapper4.getSegmentLength("12") == 12);
 }
 
-
 TEST_CASE("RandomSentence/SegmentMapper::getNumLinesInFile()", "") {
     string tFileName = "grammars/test-poem.g";
     SegmentMapper tMapper5(tFileName);
     REQUIRE(tMapper5.getNumLinesInFile() == 21);
+}
+
+TEST_CASE("RandomSentence/SegmentMapper::storePossibleSegmentValue()", "") {
+    string tFileName = "grammars/test2.g";
+    SegmentMapper tMapper6(tFileName);
+    tMapper6.parseFile();
+
+    REQUIRE(tMapper6.populateNonTerminal("object") == "chicken");
 }
