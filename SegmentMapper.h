@@ -25,9 +25,10 @@ class SegmentMapper {
     string getFirstSegmentName(const string &line);
     int getSegmentLength(const string &line);
     vector<string> getFileLines();
+    void parseFile();
+    int getNumLinesInFile();
 
  private:
-    void parseFile();
     void storePossibleSegmentValue(const string &key,
                                     const string &possibleSegmentValue);
     string rawFile;

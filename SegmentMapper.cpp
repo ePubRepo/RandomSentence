@@ -22,6 +22,7 @@ SegmentMapper::SegmentMapper (string inputFilepat) {
         this->rawFile += line + "\n";
         this->fileLines.push_back(line);
     }
+    cout << "Length: " << this->fileLines.size();
     this->rawFile = this->rawFile.substr(0, this->rawFile.length() - 1);
     t.close();
 }
@@ -44,9 +45,13 @@ int SegmentMapper::getSegmentLength(const string &line) {
     return result;
 }
 
+int SegmentMapper::getNumLinesInFile() {
+    return this->fileLines.size();
+}
+
 void SegmentMapper::storePossibleSegmentValue(const string &key,
                                         const string &possibleSegmentValue) {
-
+    cout << "Key: " << key << ", Value: " << possibleSegmentValue;
 }
 
 void SegmentMapper::parseFile() {
@@ -60,28 +65,32 @@ void SegmentMapper::parseFile() {
     ParseOperation nextExpectedOperation = SEGMENT_DEFINITION;
     string currentlyParsingSegment;
     int currentlyParsingSegmentLength;
-    int currentSegmentPossibility;
+    int currentSegmentPossibility = 0;
 
-    for (int i = 0; i < this->fileLines.size(); i++) {
+    int n = 0;
+    int numLines = this->fileLines.size();
+    while (n < numLines) {
+        cout << "here" << endl;
         //  Step 1: Get New Line to Operate On
-        string newLine = this->fileLines[i];
-
         //  Step 2: Determine What Action to Take
         //  Step 3: Take Action
         //  Step 4: Determine Next Action
         switch (nextExpectedOperation) {
-            case SEGMENT_DEFINITION:
+            case SEGMENT_DEFINITION: {
                 currentlyParsingSegment = this->getFirstSegmentName(
-                                                        this->fileLines[i]);
+                                                        this->fileLines[n]);
                 nextExpectedOperation = SEGMENT_LENGTH;
+            }
                 break;
-            case SEGMENT_LENGTH:
+            case SEGMENT_LENGTH: {
                 currentlyParsingSegmentLength = this->getSegmentLength(
-                                                        this->fileLines[i]);
+                                                        this->fileLines[n]);
                 nextExpectedOperation = SEGMENT_VALUE_POSSIBILITY;
+                currentSegmentPossibility = 0;
+            }
                 break;
-            case SEGMENT_VALUE_POSSIBILITY:
-                string possibleSegmentValue = this->fileLines[i];
+            case SEGMENT_VALUE_POSSIBILITY: {
+                string possibleSegmentValue = this->fileLines[n];
                 this->storePossibleSegmentValue(currentlyParsingSegment,
                                                 possibleSegmentValue);
                 currentSegmentPossibility++;
@@ -89,11 +98,13 @@ void SegmentMapper::parseFile() {
                     currentlyParsingSegmentLength) {
                     nextExpectedOperation = SEGMENT_DELIMETER;
                 }
+            }
                 break;
             case SEGMENT_DELIMETER:
                 nextExpectedOperation = SEGMENT_DEFINITION;
                 break;
         }
+        n++;
     }
 }
 
@@ -138,4 +149,11 @@ TEST_CASE("RandomSentence/SegmentMapper::getSegmentLength()", "") {
     SegmentMapper tMapper4;
     REQUIRE(tMapper4.getSegmentLength("2") == 2);
     REQUIRE(tMapper4.getSegmentLength("12") == 12);
+}
+
+
+TEST_CASE("RandomSentence/SegmentMapper::getNumLinesInFile()", "") {
+    string tFileName = "grammars/test-poem.g";
+    SegmentMapper tMapper5(tFileName);
+    REQUIRE(tMapper5.getNumLinesInFile() == 21);
 }
