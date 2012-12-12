@@ -19,7 +19,7 @@ using namespace std;
 class SegmentMapper {
  public:
     SegmentMapper();
-    explicit SegmentMapper(string filePath);
+    explicit SegmentMapper(const string &filePath);
     string populateNonTerminal(string terminalName);
     string getRawFile();
     string getFirstSegmentName(const string &line);

@@ -58,14 +58,14 @@ int main() {
     // Forward on to CATCH's main using our custom config.
     // This overload doesn't take command line arguments
     // So the config object must be fully set up
-    //Catch::Main(config);
+    Catch::Main(config);
     
     while (true) {
         string filename = getFileName();
         if (filename.empty()) break;
 
         //  Step 1: Read and Parse File Into Segment Map
-        SegmentMapper segMapper(filename);
+        SegmentMapper segMapper(getNormalizedFilename(filename));
         segMapper.parseFile();
 
         //  Step 2: Construct Text Segment by Segment

@@ -14,16 +14,13 @@
 SegmentMapper::SegmentMapper () {
 }
 
-SegmentMapper::SegmentMapper (string inputFilepat) {
-    std::ifstream t;
-    t.open(inputFilepat.c_str());
+SegmentMapper::SegmentMapper (const string &inputFilepat) {
+    std::ifstream t(inputFilepat.c_str());
     std::string line;
     while (std::getline(t, line)) {
-        this->rawFile += line + "\n";
         this->fileLines.push_back(line);
-    }
-    cout << "Length: " << this->fileLines.size();
-    this->rawFile = this->rawFile.substr(0, this->rawFile.length() - 1);
+        this->rawFile += line + "\n";
+    }    this->rawFile = this->rawFile.substr(0, this->rawFile.length() - 1);
     t.close();
 }
 
@@ -70,7 +67,6 @@ void SegmentMapper::parseFile() {
     int n = 0;
     int numLines = this->fileLines.size();
     while (n < numLines) {
-        cout << "here" << endl;
         //  Step 1: Get New Line to Operate On
         //  Step 2: Determine What Action to Take
         //  Step 3: Take Action
