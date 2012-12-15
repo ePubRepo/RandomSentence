@@ -22,8 +22,8 @@ class SegmentMapper {
     explicit SegmentMapper(const string &filePath);
     string populateNonTerminal(const string &terminalName);
     string getRawFile();
-    string getFirstSegmentName(const string &line);
-    int getSegmentLength(const string &line);
+    static string getFirstSegmentName(const string &line);
+    static int getSegmentLength(const string &line);
     vector<string> getFileLines();
     void parseFile();
     int getNumLinesInFile();

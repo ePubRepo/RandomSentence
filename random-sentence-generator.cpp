@@ -70,9 +70,10 @@ int main() {
 
         //  Step 2: Construct Text Segment by Segment
         TextConstructor tConstructor(segMapper);
+        tConstructor.constructOutputString();
 
         //  Step 3: Print Out the Constructed Text
-        cout << tConstructor.getOutputString();
+        cout << tConstructor.getOutputString() << endl;
     }
 
     cout << "Thanks for playing!" << endl;

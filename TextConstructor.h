@@ -14,14 +14,15 @@
 
 class TextConstructor {
  public:
+    TextConstructor();
     explicit TextConstructor(SegmentMapper sMapper);
     TextConstructor(SegmentMapper sMapper, string startingSegment);
     void constructOutputString();
     string getOutputString();
+    bool segmentPresent(const string &outputTxt);
 
  private:
     SegmentMapper segMapper;
-    string startingSegment = "start";
     string outputString = "";
 };
 
